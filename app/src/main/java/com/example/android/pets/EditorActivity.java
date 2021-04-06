@@ -15,6 +15,8 @@
  */
 package com.example.android.pets;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import androidx.core.app.NavUtils;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,12 +28,16 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.example.android.pets.data.PetContract.PetEntry;
+import com.example.android.pets.data.PetDbHelper;
+
 
 /**
  * Allows user to create a new pet or edit an existing one.
  */
 public class EditorActivity extends AppCompatActivity {
-
     /** EditText field to enter the pet's name */
     private EditText mNameEditText;
 
@@ -86,11 +92,11 @@ public class EditorActivity extends AppCompatActivity {
                 String selection = (String) parent.getItemAtPosition(position);
                 if (!TextUtils.isEmpty(selection)) {
                     if (selection.equals(getString(R.string.gender_male))) {
-                        mGender = 1; // Male
+                        mGender = PetEntry.GENDER_MALE; // Male
                     } else if (selection.equals(getString(R.string.gender_female))) {
-                        mGender = 2; // Female
+                        mGender = PetEntry.GENDER_FEMALE; // Female
                     } else {
-                        mGender = 0; // Unknown
+                        mGender = PetEntry.GENDER_UNKNOWN; // Unknown
                     }
                 }
             }
@@ -111,13 +117,56 @@ public class EditorActivity extends AppCompatActivity {
         return true;
     }
 
+    private void insertPet() {
+        // To access our database, we instantiate our subclass of SQLiteOpenHelper
+        // and pass the context, which is the current activity.
+        PetDbHelper mDbHelper = new PetDbHelper(this);
+
+        // Gets the database in write mode
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        // Get the Pet's name
+        //EditText namePetEditText = (EditText) findViewById(R.id.edit_pet_name);
+        //String petName = mNameEditText.getText().toString();
+        String petName = mNameEditText.getText().toString().trim();
+
+        // Get the Pet's breed
+        //EditText breedPetEditText = (EditText) findViewById(R.id.edit_pet_breed);
+        String breedPet = mBreedEditText.getText().toString().trim();
+
+        // Get the Pet's weight
+        //EditText weightPetEditText = (EditText) findViewById(R.id.edit_pet_weight);
+        String weightPet = mWeightEditText.getText().toString().trim();
+        int weight = Integer.parseInt(weightPet);
+
+        // Create a ContentValues object where column names are the keys,
+        // and Toto's pet attributes are the values.
+        ContentValues values = new ContentValues();
+        values.put(PetEntry.COLUMN_PET_NAME, petName);
+        values.put(PetEntry.COLUMN_PET_BREED, breedPet);
+        values.put(PetEntry.COLUMN_PET_GENDER, mGender);
+        values.put(PetEntry.COLUMN_PET_WEIGHT, weight);
+
+        long newRowId = db.insert(PetEntry.TABLE_NAME, null, values);
+
+        if ( newRowId != -1){
+            Toast.makeText(this, "Successfully "+ newRowId, Toast.LENGTH_SHORT).show();
+        }else if (newRowId == -1){
+            Toast.makeText(this, "Unsuccess", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // User clicked on a menu option in the app bar overflow menu
         switch (item.getItemId()) {
             // Respond to a click on the "Save" menu option
             case R.id.action_save:
-                // Do nothing for now
+                //Save pet to database
+                insertPet();
+                //Exit activity
+                finish();
                 return true;
             // Respond to a click on the "Delete" menu option
             case R.id.action_delete:
