@@ -35,6 +35,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;//5
+import android.widget.Toast;
 
 import com.example.android.pets.data.PetContract.PetEntry;//6
 
@@ -157,6 +158,7 @@ public class CatalogActivity extends AppCompatActivity {
             cursor.close();
         }
     }
+
 
     /**
      * Helper method to insert hardcoded pet data into the database. For debugging purposes only.
