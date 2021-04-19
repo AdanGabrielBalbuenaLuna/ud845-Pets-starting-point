@@ -188,6 +188,44 @@ EditorActivity extends AppCompatActivity {
     }
 
 
+    /*
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        EditText petName = (EditText)findViewById(R.id.edit_pet_name);
+        String name  =  petName.getText().toString();
+
+        EditText weightName = (EditText)findViewById(R.id.edit_pet_weight);
+        String weight  =  weightName.getText().toString();
+
+        // User clicked on a menu option in the app bar overflow menu
+        switch (item.getItemId()) {
+            // Respond to a click on the "Save" menu option
+            case R.id.action_save:
+                if (TextUtils.isEmpty(name)){
+                    Toast.makeText(this, "You need to add a name", Toast.LENGTH_SHORT).show();
+                } else if (TextUtils.isEmpty(weight)){
+                    Toast.makeText(this, "You need to add a weight", Toast.LENGTH_SHORT).show();
+                } else {
+                    //Save pet to database
+                    insertPet();
+                    //Exit activity
+                    finish();
+                    return true;
+                }
+            // Respond to a click on the "Delete" menu option
+            case R.id.action_delete:
+                // Do nothing for now
+                return true;
+            // Respond to a click on the "Up" arrow button in the app bar
+            case android.R.id.home:
+                // Navigate back to parent activity (CatalogActivity)
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }*/
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // User clicked on a menu option in the app bar overflow menu
